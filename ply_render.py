@@ -12,14 +12,14 @@ bl_info = {
 }
 
 
-def create_ply_material(use_emission=False, emission_strength=0.02):
+def create_ply_material(name="PLY_Material", use_emission=False, emission_strength=0.02):
     """创建PLY材质并使用Col属性作为颜色输入"""
     # 每次重建材质以反映最新设置
-    mat = bpy.data.materials.get("PLY_Material")
+    mat = bpy.data.materials.get(name)
     if mat:
         bpy.data.materials.remove(mat)
     
-    mat = bpy.data.materials.new(name="PLY_Material")
+    mat = bpy.data.materials.new(name=name)
     mat.use_nodes = True
     
     # 清除默认节点
@@ -134,7 +134,9 @@ class PLY_OT_ProcessObject(bpy.types.Operator):
             scene = context.scene
             
             # 1. 创建PLY材质（着色节点设置）
+            mat_name = f"{obj.name}_PLY_Material"
             material = create_ply_material(
+                name=mat_name,
                 use_emission=scene.ply_use_emission,
                 emission_strength=scene.ply_emission_strength
             )
